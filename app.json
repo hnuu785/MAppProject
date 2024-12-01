@@ -15,7 +15,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.qksksk785.matchTest"
     },
     "web": {
       "bundler": "metro",
@@ -37,6 +38,14 @@
     "experiments": {
       "typedRoutes": true
     },
-		"hostType": "lan",
+    "hostType": "tunnel",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "dc1f42d2-a197-4a1f-bbe9-adeef2d1fa5d"
+      }
+    }
   }
 }

@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, Dimensions, TextInput } from "react-native";
+import { Text, View, StyleSheet, Dimensions, TextInput, TouchableWithoutFeedback } from "react-native";
 import { Link } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { auth } from '../firebaseConfig';
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -8,10 +11,51 @@ const windowHeight = Dimensions.get('window').height;
 export default function Index() {
 	const [intro, setIntro] = useState('');
 
+	// 여기부터 auth 부분
+	const nextFunction = async () => {
+    try {
+      const email = await AsyncStorage.getItem('myEmail');
+      const password = await AsyncStorage.getItem('myPassword');
+			const name = await AsyncStorage.getItem('myName');
+			
+      if (email && password) {
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            console.log('User created:', user);
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log('Error code:', errorCode);
+            console.log('Error message:', errorMessage);
+          });
+      } else {
+        console.log('Email or password not found in AsyncStorage');
+      }
+			updateProfile(auth.currentUser, {
+				displayName: name
+			}).then(() => {
+				// Profile updated!
+				// ...
+			}).catch((error) => {
+				// An error occurred
+				// ...
+			});
+    } catch (error) {
+      console.log('Error retrieving data from AsyncStorage:', error);
+    }
+  }
+  // 여기까지 auth 부분
+	
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Complete</Text>
-      <Link href="/" style={styles.next}>Next</Link>
+			<Link href="/" asChild>
+				<TouchableWithoutFeedback onPress={nextFunction}>
+					<Text style={styles.next}>Next</Text>
+				</TouchableWithoutFeedback>
+			</Link>
     </View>
   );
 }
@@ -21,7 +65,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     width: windowWidth,
     height: windowHeight,
-    paddingHorizontal: 20, 
+    paddingHorizontal: 20,
     paddingTop: 80,
   },
   title: {

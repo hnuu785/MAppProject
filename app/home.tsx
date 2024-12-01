@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Dimensions, TextInput } from "react-native";
 import { Link } from 'expo-router';
+import { auth } from '../firebaseConfig';
+import { getAuth } from "firebase/auth";
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -8,6 +10,13 @@ const windowHeight = Dimensions.get('window').height;
 export default function Index() {
   const [name, setName] = useState('user');
 
+	useEffect(() => {
+    const user = auth.currentUser;
+    if (user !== null) {
+      setName(user.displayName);
+    }
+  }, []);
+	
   return (
     <View style={styles.container}>
       <Text style={styles.title}>MATCHAPP</Text>

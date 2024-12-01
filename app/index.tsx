@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, Dimensions, TextInput } from "react-native";
+import { Text, View, StyleSheet, Dimensions, TextInput, TouchableWithoutFeedback } from "react-native";
 import { Link } from 'expo-router';
+import { auth } from '../firebaseConfig';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -8,7 +10,21 @@ const windowHeight = Dimensions.get('window').height;
 export default function Index() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+	
+	const signinFunction = () => {
+		const auth = getAuth();
+		signInWithEmailAndPassword(auth, email, password)
+			.then((userCredential) => {
+				// Signed in 
+				const user = userCredential.user;
+				// ...
+			})
+			.catch((error) => {
+				const errorCode = error.code;
+				const errorMessage = error.message;
+			});
+	}
+	
   return (
     <View style={styles.container}>
       <Text style={styles.title}>MATCHAPP</Text>
@@ -20,8 +36,12 @@ export default function Index() {
         <Text style={styles.label}>password</Text>
         <TextInput style={styles.inputBox} value={password} onChangeText={setPassword} secureTextEntry />
       </View>
-      <Link href="/home" style={styles.signIn}>Sign in</Link>
-      <Link href="/signup1" style={styles.signUp}>Sign up</Link>
+			<Link href="/home" asChild>
+				<TouchableWithoutFeedback onPress={signinFunction}>
+					<Text style={styles.signIn}>Sign in</Text>
+				</TouchableWithoutFeedback>
+			</Link>
+			<Link style={styles.signUp} href="/signup1">Sign up</Link>
     </View>
   );
 }

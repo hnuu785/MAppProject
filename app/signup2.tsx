@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, Dimensions, TextInput } from "react-native";
+import { Text, View, StyleSheet, Dimensions, TextInput, TouchableWithoutFeedback } from "react-native";
 import { Link } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -8,13 +9,21 @@ const windowHeight = Dimensions.get('window').height;
 export default function Index() {
 	const [intro, setIntro] = useState('');
 
+	const nextFunction = () => {
+		AsyncStorage.setItem('myIntro', intro);
+	};
+	
   return (
     <View style={styles.container}>
       <View style={styles.inputSection}>
         <Text style={styles.label}>Introduce yourself</Text>
         <TextInput style={styles.inputBox} value={intro} onChangeText={setIntro} />
       </View>
-      <Link href="/signup3" style={styles.next}>Next</Link>
+			<Link href="/signup3" asChild>
+				<TouchableWithoutFeedback onPress={nextFunction}>
+					<Text style={styles.next}>Next</Text>
+				</TouchableWithoutFeedback>
+			</Link>
     </View>
   );
 }
