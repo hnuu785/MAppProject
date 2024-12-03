@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, Dimensions, TextInput, TouchableWithoutFeedback } from "react-native";
+import { Text, View, StyleSheet, Dimensions, TextInput } from "react-native";
 import { Link } from 'expo-router';
 import { auth } from '../firebaseConfig';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -12,7 +12,6 @@ export default function Index() {
   const [password, setPassword] = useState('');
 	
 	const signinFunction = () => {
-		const auth = getAuth();
 		signInWithEmailAndPassword(auth, email, password)
 			.then((userCredential) => {
 				// Signed in 
@@ -36,11 +35,7 @@ export default function Index() {
         <Text style={styles.label}>password</Text>
         <TextInput style={styles.inputBox} value={password} onChangeText={setPassword} secureTextEntry />
       </View>
-			<Link href="/home" asChild>
-				<TouchableWithoutFeedback onPress={signinFunction}>
-					<Text style={styles.signIn}>Sign in</Text>
-				</TouchableWithoutFeedback>
-			</Link>
+			<Link href="/home" style={styles.signIn} onPress={signinFunction}>Sign in</Link>
 			<Link style={styles.signUp} href="/signup1">Sign up</Link>
     </View>
   );

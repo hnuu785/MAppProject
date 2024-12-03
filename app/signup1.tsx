@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, Dimensions, TextInput, TouchableWithoutFeedback } from "react-native";
+import { Text, View, StyleSheet, Dimensions, TextInput } from "react-native";
 import { Link } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -31,11 +31,7 @@ export default function Index() {
         <Text style={styles.label}>password</Text>
         <TextInput style={styles.inputBox} value={password} onChangeText={setPassword} secureTextEntry />
       </View>
-			<Link href="/signup2" asChild>
-				<TouchableWithoutFeedback onPress={nextFunction}>
-					<Text style={styles.next}>Next</Text>
-				</TouchableWithoutFeedback>
-			</Link>
+			<Link href="/signup2" style={styles.next} onPress={nextFunction}>Next</Link>
     </View>
   );
 }

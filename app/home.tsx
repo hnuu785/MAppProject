@@ -2,25 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Dimensions, TextInput } from "react-native";
 import { Link } from 'expo-router';
 import { auth } from '../firebaseConfig';
-import { getAuth } from "firebase/auth";
-
+import { onAuthStateChanged } from 'firebase/auth';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default function Index() {
-  const [name, setName] = useState('user');
-
+  const [isLogin, setIsLogin] = useState('로그인되지 않았습니다.');
+	const [emai, setEmai] = useState('asdf');
+	
 	useEffect(() => {
-    const user = auth.currentUser;
-    if (user !== null) {
-      setName(user.displayName);
-    }
-  }, []);
+		onAuthStateChanged(auth, (user) => {
+			const me = auth.currentUser;
+			if (me) {
+				setIsLogin('로그인됨.');
+				setEmai(me.email);
+			}
+			else {
+				const a = 1;
+			}
+		});
+	}, []);
 	
   return (
     <View style={styles.container}>
       <Text style={styles.title}>MATCHAPP</Text>
-      <Text style={styles.title}>{name}님 환영합니다.</Text>
+      <Text style={styles.title}>{isLogin}</Text>
+			<Text style={styles.title}>{emai}</Text>
 			<Link href="/" style={styles.next}>Logout</Link>
     </View>
   );

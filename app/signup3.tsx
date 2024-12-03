@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, Dimensions, TextInput, TouchableWithoutFeedback } from "react-native";
+import { Text, View, StyleSheet, Dimensions, TextInput, Alert, TouchableWithoutFeedback } from "react-native";
 import { Link } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { auth } from '../firebaseConfig';
-import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -22,18 +22,15 @@ export default function Index() {
         createUserWithEmailAndPassword(auth, email, password)
           .then((userCredential) => {
             const user = userCredential.user;
-            console.log('User created:', user);
           })
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            console.log('Error code:', errorCode);
-            console.log('Error message:', errorMessage);
           });
       } else {
         console.log('Email or password not found in AsyncStorage');
       }
-			updateProfile(auth.currentUser, {
+			/*updateProfile(auth.currentUser, {
 				displayName: name
 			}).then(() => {
 				// Profile updated!
@@ -41,7 +38,7 @@ export default function Index() {
 			}).catch((error) => {
 				// An error occurred
 				// ...
-			});
+			});*/
     } catch (error) {
       console.log('Error retrieving data from AsyncStorage:', error);
     }
@@ -51,11 +48,7 @@ export default function Index() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Complete</Text>
-			<Link href="/" asChild>
-				<TouchableWithoutFeedback onPress={nextFunction}>
-					<Text style={styles.next}>Next</Text>
-				</TouchableWithoutFeedback>
-			</Link>
+			<Link href="/" style={styles.next} onPress={nextFunction}>Next</Link>
     </View>
   );
 }
