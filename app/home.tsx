@@ -8,14 +8,14 @@ const windowHeight = Dimensions.get('window').height;
 
 export default function Index() {
   const [isLogin, setIsLogin] = useState('로그인되지 않았습니다.');
-	const [emai, setEmai] = useState('asdf');
+	const [name, setName] = useState('user');
 	
 	useEffect(() => {
 		onAuthStateChanged(auth, (user) => {
 			const me = auth.currentUser;
 			if (me) {
 				setIsLogin('로그인됨.');
-				setEmai(me.email);
+				setName(me.displayName);
 			}
 			else {
 				const a = 1;
@@ -27,7 +27,7 @@ export default function Index() {
     <View style={styles.container}>
       <Text style={styles.title}>MATCHAPP</Text>
       <Text style={styles.title}>{isLogin}</Text>
-			<Text style={styles.title}>{emai}</Text>
+			<Text style={styles.body}>{name}님 어서오세요.</Text>
 			<Link href="/" style={styles.next}>Logout</Link>
     </View>
   );
@@ -58,5 +58,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderRadius: 5,
 		marginTop: 80,
+	},
+	body: {
+		fontSize: 30,
+    textAlign: 'center',
+		marginTop: 20,
+    marginBottom: 20,
 	},
 });

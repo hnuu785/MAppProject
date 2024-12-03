@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, Dimensions, TextInput, Alert, TouchableWithoutF
 import { Link } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { auth } from '../firebaseConfig';
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -22,6 +22,9 @@ export default function Index() {
         createUserWithEmailAndPassword(auth, email, password)
           .then((userCredential) => {
             const user = userCredential.user;
+						updateProfile(user, {
+							displayName: name,
+						});
           })
           .catch((error) => {
             const errorCode = error.code;
@@ -30,15 +33,6 @@ export default function Index() {
       } else {
         console.log('Email or password not found in AsyncStorage');
       }
-			/*updateProfile(auth.currentUser, {
-				displayName: name
-			}).then(() => {
-				// Profile updated!
-				// ...
-			}).catch((error) => {
-				// An error occurred
-				// ...
-			});*/
     } catch (error) {
       console.log('Error retrieving data from AsyncStorage:', error);
     }
